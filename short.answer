@@ -1,0 +1,37 @@
+Q1. It is your choice to use either an ordered or unordered set. In a few sentences, what are some of the tradeoffs between the two? Additionally, please give an example (that has not been shown in lecture) of a valid hash function that could be used to hash student names for an unordered set.
+A1. The tradeoffs between ordered and unordered sets are:
+Ordered.
+Advantages: - Elements are sorted automatically.
+            - Efficient for range queries or if sorted order is required.
+Disadvantages: - Slower than unordered sets for basic insert, delete, and search operations.
+               - Consumes more memory due to extra tree structure overhead.
+
+Unordered.
+Advantages: - Provides average constant time complexity (O(1)) for insertion, deletion, and lookup.
+            - Faster when only existence checks are needed without sorting.
+Disadvantages: - No inherent order among elements.
+               - Potentially higher memory consumption due to hash collisions and bucket management.
+               - In worst-case scenarios (e.g., hash collisions), performance may degrade to O(n).
+Example of hash function
+#include <string>
+#include <functional> 
+
+struct StudentHash {
+    std::size_t operator()(const std::string& name) const {
+        std::size_t hashValue = 0;
+        const int prime = 31; 
+        for (char ch : name) {
+            hashValue = hashValue * prime + ch;
+        }
+        return hashValue;
+    }
+};
+
+
+Q2. Note that we are saving pointers to names in the queue, not names themselves. Why might this be desired in this problem? What happens if the original set where the names are stored goes out of scope and the pointers are referenced?
+A2. Storing pointers to names rather than the names themselves in a queue can have several benefits, like the following ones.
+Storing pointers requires less memory compared to duplicating full strings, especially when dealing with long names or large datasets.
+When dealing with large strings or frequent updates, copying entire names each time could be inefficient.
+But, it have potential risks, like:
+Since pointers reference the original string, any updates made to the original name will automatically reflect wherever the pointer is used.
+Referencing a deallocated pointer can lead to critical security vulnerabilities or corrupted data.
